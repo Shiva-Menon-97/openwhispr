@@ -882,6 +882,12 @@ export const useAudioRecording = (toast, options = {}) => {
   useEffect(() => {
     if (!isRecording) return undefined;
 
+    let silenceTicks = 0;
+    const settings = getSettings();
+    const ttsEnabled = settings.ttsEnabled;
+    const ttsWaitTime = settings.ttsWaitTime || 5;
+    const maxSilenceTicks = (ttsWaitTime * 1000) / COMPANION_AUDIO_LEVEL_INTERVAL_MS;
+
     const reportAudioLevel = () => {
       const level = getAudioLevel();
       if (level === null) return;
@@ -894,11 +900,23 @@ export const useAudioRecording = (toast, options = {}) => {
       if (!isAssistantVoice && assistantOpenRef?.current) {
         window.electronAPI?.dictationAudioLevelChanged?.(level);
       }
+
+      if (ttsEnabled && isAssistantVoice) {
+        if (level < 0.07) {
+          silenceTicks++;
+          if (silenceTicks >= maxSilenceTicks && !stopLockRef.current) {
+            silenceTicks = 0;
+            performStopRecording();
+          }
+        } else {
+          silenceTicks = 0;
+        }
+      }
     };
     reportAudioLevel();
     const interval = setInterval(reportAudioLevel, COMPANION_AUDIO_LEVEL_INTERVAL_MS);
     return () => clearInterval(interval);
-  }, [assistantOpenRef, getAudioLevel, isAssistantVoice, isRecording]);
+  }, [assistantOpenRef, getAudioLevel, isAssistantVoice, isRecording, performStopRecording]);
 
   const toggleListening = async ({
     voiceAgentRequested = false,

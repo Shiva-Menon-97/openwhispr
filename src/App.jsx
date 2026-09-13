@@ -776,6 +776,7 @@ export default function App() {
             onResponseContent={assistant.handleResponseContent}
             onConversationReset={assistant.handleConversationReset}
             onSelectionContextChange={assistant.handleSelectionContextChange}
+            onTTSComplete={() => toggleListening({ voiceAgentRequested: true })}
           />
         )}
 

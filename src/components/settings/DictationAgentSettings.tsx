@@ -29,6 +29,19 @@ export default function DictationAgentSettings() {
   const setUseDictationAgentVisionModel = useSettingsStore(
     (s) => s.setUseDictationAgentVisionModel
   );
+  
+  const ttsEnabled = useSettingsStore((s) => s.ttsEnabled);
+  const setTtsEnabled = useSettingsStore((s) => s.setTtsEnabled);
+  const ttsWaitTime = useSettingsStore((s) => s.ttsWaitTime);
+  const setTtsWaitTime = useSettingsStore((s) => s.setTtsWaitTime);
+  const ttsEndpointUrl = useSettingsStore((s) => s.ttsEndpointUrl);
+  const setTtsEndpointUrl = useSettingsStore((s) => s.setTtsEndpointUrl);
+  const ttsApiKey = useSettingsStore((s) => s.ttsApiKey);
+  const setTtsApiKey = useSettingsStore((s) => s.setTtsApiKey);
+  const ttsVoice = useSettingsStore((s) => s.ttsVoice);
+  const setTtsVoice = useSettingsStore((s) => s.setTtsVoice);
+  const ttsModel = useSettingsStore((s) => s.ttsModel);
+  const setTtsModel = useSettingsStore((s) => s.setTtsModel);
   const {
     isMacOS,
     granted: screenGranted,
@@ -243,6 +256,97 @@ export default function DictationAgentSettings() {
             description={t("dictationAgent.prompt.description")}
           />
           <PromptStudio kind="dictationAgent" />
+        </div>
+      )}
+
+      {useDictationAgent && (
+        <div className="border-t border-border/70 pt-6 space-y-3">
+          <SectionHeader
+            title="TTS Loop Integration"
+            description="Enable seamless spoken responses via text-to-speech."
+          />
+          <SettingsPanel>
+            <SettingsPanelRow>
+              <SettingsRow
+                label="Enable TTS Loop"
+                description="When enabled, the Voice Assistant will read out responses and automatically open the microphone again when it stops speaking."
+              >
+                <Toggle checked={ttsEnabled} onChange={setTtsEnabled} />
+              </SettingsRow>
+            </SettingsPanelRow>
+            
+            {ttsEnabled && (
+              <>
+                <SettingsPanelRow>
+                  <SettingsRow
+                    label="Wait Time (seconds)"
+                    description="How long the assistant waits in silence before ending the loop and closing the dictation session."
+                  >
+                    <Input
+                      type="number"
+                      min={1}
+                      max={60}
+                      value={ttsWaitTime}
+                      onChange={(e) => setTtsWaitTime(parseInt(e.target.value) || 5)}
+                      className="w-24 text-center"
+                    />
+                  </SettingsRow>
+                </SettingsPanelRow>
+                <SettingsPanelRow>
+                  <SettingsRow
+                    label="Endpoint URL"
+                    description="An OpenAI compatible TTS endpoint (/v1/audio/speech)."
+                  >
+                    <Input
+                      type="text"
+                      placeholder="https://api.openai.com/v1/audio/speech"
+                      value={ttsEndpointUrl}
+                      onChange={(e) => setTtsEndpointUrl(e.target.value)}
+                    />
+                  </SettingsRow>
+                </SettingsPanelRow>
+                <SettingsPanelRow>
+                  <SettingsRow
+                    label="API Key"
+                    description="Authentication key for your TTS provider."
+                  >
+                    <Input
+                      type="password"
+                      placeholder="sk-..."
+                      value={ttsApiKey}
+                      onChange={(e) => setTtsApiKey(e.target.value)}
+                    />
+                  </SettingsRow>
+                </SettingsPanelRow>
+                <SettingsPanelRow>
+                  <SettingsRow
+                    label="TTS Model"
+                    description="The model id (e.g. tts-1 or eleven_multilingual_v2)."
+                  >
+                    <Input
+                      type="text"
+                      placeholder="tts-1"
+                      value={ttsModel}
+                      onChange={(e) => setTtsModel(e.target.value)}
+                    />
+                  </SettingsRow>
+                </SettingsPanelRow>
+                <SettingsPanelRow>
+                  <SettingsRow
+                    label="Voice Name"
+                    description="The name of the voice to use (e.g. alloy, echo, etc)."
+                  >
+                    <Input
+                      type="text"
+                      placeholder="alloy"
+                      value={ttsVoice}
+                      onChange={(e) => setTtsVoice(e.target.value)}
+                    />
+                  </SettingsRow>
+                </SettingsPanelRow>
+              </>
+            )}
+          </SettingsPanel>
         </div>
       )}
     </div>

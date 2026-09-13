@@ -42,6 +42,7 @@ import {
   deliverAssistantResponse,
   type AssistantResponseDelivery,
 } from "../../helpers/assistantResponseDelivery";
+import { playTTS, abortTTS } from "../../helpers/ttsService";
 
 export interface AssistantCommand {
   id: number;
@@ -79,6 +80,7 @@ interface AssistantPanelProps {
   onResponseContent: () => void;
   onConversationReset: () => void;
   onSelectionContextChange: (context: AgentSelectionContext | null) => void;
+  onTTSComplete?: () => void;
 }
 
 // Updating the selection indicator must not rerender react-markdown: its
@@ -105,6 +107,7 @@ export function AssistantPanel({
   onResponseContent,
   onConversationReset,
   onSelectionContextChange,
+  onTTSComplete,
 }: AssistantPanelProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -122,6 +125,15 @@ export function AssistantPanel({
     inferenceScope: "dictationAgent",
     onStreamComplete: (_assistantId, content, toolCalls) => {
       void persistence.saveAssistantMessage(content, toolCalls);
+      
+      const settings = useSettingsStore.getState();
+      if (settings.ttsEnabled && content) {
+        playTTS(content, settings).then(() => {
+          if (onTTSComplete && useSettingsStore.getState().ttsEnabled) {
+             onTTSComplete();
+          }
+        });
+      }
     },
     onResponseContent,
   });
@@ -383,6 +395,7 @@ export function AssistantPanel({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         if (voiceState === "listening") return;
+        abortTTS();
         if (isBusy) {
           streaming.cancelStream();
           // A hidden panel means the compact Beam circle owns the thinking

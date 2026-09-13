@@ -847,6 +847,18 @@ export interface SettingsState
     PrivacySettings,
     ThemeSettings,
     ChatAgentSettings {
+  ttsEnabled: boolean;
+  ttsWaitTime: number;
+  ttsEndpointUrl: string;
+  ttsApiKey: string;
+  ttsVoice: string;
+  ttsModel: string;
+  setTtsEnabled: (value: boolean) => void;
+  setTtsWaitTime: (value: number) => void;
+  setTtsEndpointUrl: (value: string) => void;
+  setTtsApiKey: (key: string) => void;
+  setTtsVoice: (value: string) => void;
+  setTtsModel: (value: string) => void;
   isSignedIn: boolean;
   audioCuesEnabled: boolean;
   pauseMediaOnDictation: boolean;
@@ -1502,6 +1514,13 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
   cleanupModel: readString("cleanupModel", ""),
   cleanupProvider: readString("cleanupProvider", "openai"),
 
+  ttsEnabled: readBoolean("ttsEnabled", false),
+  ttsWaitTime: readNumber("ttsWaitTime", 5),
+  ttsEndpointUrl: readString("ttsEndpointUrl", ""),
+  ttsVoice: readString("ttsVoice", ""),
+  ttsModel: readString("ttsModel", ""),
+  ttsApiKey: readString("ttsApiKey", ""),
+
   // Secrets hydrate from main process in initializeSettings, never from localStorage.
   openaiApiKey: "",
   anthropicApiKey: "",
@@ -2028,6 +2047,13 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
   setUseDictationAgent: createBooleanSetter("useDictationAgent"),
   setCleanupProvider: createStringSetter("cleanupProvider"),
   setCleanupModel: createStringSetter("cleanupModel"),
+
+  setTtsEnabled: createBooleanSetter("ttsEnabled"),
+  setTtsWaitTime: createNumberSetter("ttsWaitTime"),
+  setTtsEndpointUrl: createStringSetter("ttsEndpointUrl"),
+  setTtsVoice: createStringSetter("ttsVoice"),
+  setTtsModel: createStringSetter("ttsModel"),
+  setTtsApiKey: createStringSetter("ttsApiKey"),
 
   // Replaces the whole dictionary: anything absent from `words` is deleted.
   // Editing specific words wants updateCustomDictionary instead (#1295).
