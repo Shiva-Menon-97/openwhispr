@@ -10,19 +10,38 @@ export async function playTTS(text, settings) {
   currentAbortController = new AbortController();
 
   try {
-    const response = await fetch(ttsEndpointUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(ttsApiKey ? { Authorization: `Bearer ${ttsApiKey}` } : {}),
-      },
-      body: JSON.stringify({
-        model: ttsModel || "tts-1",
-        input: text,
-        voice: ttsVoice || "alloy",
-      }),
-      signal: currentAbortController.signal,
-    });
+    const isEleven = ttsEndpointUrl.includes("elevenlabs.io");
+    let response;
+
+    if (isEleven) {
+      response = await fetch(`${ttsEndpointUrl}/${ttsVoice}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(ttsApiKey ? { "xi-api-key": ttsApiKey } : {}),
+        },
+        body: JSON.stringify({
+          text,
+          model_id: ttsModel || "eleven_monolingual_v1"
+        }),
+        signal: currentAbortController.signal,
+      });
+    } else {
+      // 100% original path for OpenAI/LocalAI
+      response = await fetch(ttsEndpointUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(ttsApiKey ? { Authorization: `Bearer ${ttsApiKey}` } : {}),
+        },
+        body: JSON.stringify({
+          model: ttsModel || "tts-1",
+          input: text,
+          voice: ttsVoice || "alloy",
+        }),
+        signal: currentAbortController.signal,
+      });
+    }
 
     if (!response.ok) {
       throw new Error(`TTS Fetch error: ${response.status} ${response.statusText}`);
