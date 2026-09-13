@@ -466,7 +466,7 @@ export default function App() {
 
   const micTooltip = getMicTooltip();
   const assistantVoiceState =
-    isRecording && isAssistantVoice
+    (isRecording || isPreparing) && isAssistantVoice
       ? "listening"
       : isProcessing && isAssistantVoice
         ? "transcribing"

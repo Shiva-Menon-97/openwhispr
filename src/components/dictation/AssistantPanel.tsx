@@ -128,7 +128,9 @@ export function AssistantPanel({
       
       const settings = useSettingsStore.getState();
       if (settings.ttsEnabled && content) {
+        setTtsPlaying(true);
         playTTS(content, settings).then(() => {
+          setTtsPlaying(false);
           if (onTTSComplete && useSettingsStore.getState().ttsEnabled) {
              onTTSComplete();
           }
@@ -146,6 +148,7 @@ export function AssistantPanel({
     [persistence]
   );
 
+  const [ttsPlaying, setTtsPlaying] = useState(false);
   const [submissionInFlight, setSubmissionInFlight] = useState(false);
   const sendMessage = useChatMessageSender({
     conversationId: persistence.conversationId,
@@ -308,7 +311,7 @@ export function AssistantPanel({
     isBusy,
     isStreaming: Boolean(latestAssistantMessage?.isStreaming),
     voiceState,
-    requestPending: thinking || pendingCommand != null,
+    requestPending: thinking || pendingCommand != null || ttsPlaying,
   });
   const responseSelectionRootRef = useRef<HTMLDivElement | null>(null);
   const [selectedContext, setSelectedContext] = useState<AgentSelectionContext | null>(null);
