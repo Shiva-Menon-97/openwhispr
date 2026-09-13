@@ -886,6 +886,7 @@ export const useAudioRecording = (toast, options = {}) => {
     const settings = getSettings();
     const ttsEnabled = settings.ttsEnabled;
     const ttsWaitTime = settings.ttsWaitTime || 5;
+    const ttsSilenceLevel = settings.ttsSilenceLevel || 0.07;
     const maxSilenceTicks = (ttsWaitTime * 1000) / COMPANION_AUDIO_LEVEL_INTERVAL_MS;
 
     const reportAudioLevel = () => {
@@ -902,7 +903,7 @@ export const useAudioRecording = (toast, options = {}) => {
       }
 
       if (ttsEnabled && isAssistantVoice) {
-        if (level < 0.07) {
+        if (level < ttsSilenceLevel) {
           silenceTicks++;
           if (silenceTicks >= maxSilenceTicks && !stopLockRef.current) {
             silenceTicks = 0;

@@ -34,6 +34,8 @@ export default function DictationAgentSettings() {
   const setTtsEnabled = useSettingsStore((s) => s.setTtsEnabled);
   const ttsWaitTime = useSettingsStore((s) => s.ttsWaitTime);
   const setTtsWaitTime = useSettingsStore((s) => s.setTtsWaitTime);
+  const ttsSilenceLevel = useSettingsStore((s) => s.ttsSilenceLevel);
+  const setTtsSilenceLevel = useSettingsStore((s) => s.setTtsSilenceLevel);
   const ttsEndpointUrl = useSettingsStore((s) => s.ttsEndpointUrl);
   const setTtsEndpointUrl = useSettingsStore((s) => s.setTtsEndpointUrl);
   const ttsApiKey = useSettingsStore((s) => s.ttsApiKey);
@@ -288,6 +290,22 @@ export default function DictationAgentSettings() {
                       max={60}
                       value={ttsWaitTime}
                       onChange={(e) => setTtsWaitTime(parseInt(e.target.value) || 5)}
+                      className="w-24 text-center"
+                    />
+                  </SettingsRow>
+                </SettingsPanelRow>
+                <SettingsPanelRow>
+                  <SettingsRow
+                    label="Silence Level Threshold"
+                    description="The audio level below which audio is considered silence."
+                  >
+                    <Input
+                      type="number"
+                      min={0.01}
+                      max={1.0}
+                      step={0.01}
+                      value={ttsSilenceLevel}
+                      onChange={(e) => setTtsSilenceLevel(parseFloat(e.target.value) || 0.07)}
                       className="w-24 text-center"
                     />
                   </SettingsRow>

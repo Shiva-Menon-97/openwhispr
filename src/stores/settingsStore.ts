@@ -200,6 +200,12 @@ function readNumber(key: string, fallback: number): number {
   return isNaN(parsed) ? fallback : parsed;
 }
 
+function readFloat(key: string, fallback: number): number {
+  if (!isBrowser) return fallback;
+  const parsed = parseFloat(localStorage.getItem(key) ?? "");
+  return isNaN(parsed) ? fallback : parsed;
+}
+
 // Durations offered by the mic warm-hold select; unknown values snap to 0 (off)
 // so a hand-edited localStorage entry can never hold the mic open indefinitely.
 export const MIC_WARM_HOLD_CHOICES = [0, 10, 60, 900] as const;
@@ -849,12 +855,14 @@ export interface SettingsState
     ChatAgentSettings {
   ttsEnabled: boolean;
   ttsWaitTime: number;
+  ttsSilenceLevel: number;
   ttsEndpointUrl: string;
   ttsApiKey: string;
   ttsVoice: string;
   ttsModel: string;
   setTtsEnabled: (value: boolean) => void;
   setTtsWaitTime: (value: number) => void;
+  setTtsSilenceLevel: (value: number) => void;
   setTtsEndpointUrl: (value: string) => void;
   setTtsApiKey: (key: string) => void;
   setTtsVoice: (value: string) => void;
@@ -1516,6 +1524,7 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
 
   ttsEnabled: readBoolean("ttsEnabled", false),
   ttsWaitTime: readNumber("ttsWaitTime", 5),
+  ttsSilenceLevel: readFloat("ttsSilenceLevel", 0.07),
   ttsEndpointUrl: readString("ttsEndpointUrl", ""),
   ttsVoice: readString("ttsVoice", ""),
   ttsModel: readString("ttsModel", ""),
@@ -2050,6 +2059,7 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
 
   setTtsEnabled: createBooleanSetter("ttsEnabled"),
   setTtsWaitTime: createNumberSetter("ttsWaitTime"),
+  setTtsSilenceLevel: createNumberSetter("ttsSilenceLevel"),
   setTtsEndpointUrl: createStringSetter("ttsEndpointUrl"),
   setTtsVoice: createStringSetter("ttsVoice"),
   setTtsModel: createStringSetter("ttsModel"),
