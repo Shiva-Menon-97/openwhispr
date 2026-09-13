@@ -3734,6 +3734,24 @@
     "prompt": {
       "title": "Assistent-Prompt",
       "description": "Der System-Prompt, der bei Erkennung des Aktivierungsworts verwendet wird. Fällt auf die integrierte Standardvorgabe zurück."
+    },
+    "tts": {
+      "title": "TTS Loop Integration",
+      "description": "Enable seamless spoken responses via text-to-speech.",
+      "enable": "Enable TTS Loop",
+      "enableDescription": "When enabled, the Voice Assistant will read out responses and automatically open the microphone again when it stops speaking.",
+      "waitTime": "Wait Time (seconds)",
+      "waitTimeDescription": "How long the assistant waits in silence before ending the loop and closing the dictation session.",
+      "silenceLevel": "Silence Level Threshold",
+      "silenceLevelDescription": "The audio level below which audio is considered silence.",
+      "endpointUrl": "Endpoint URL",
+      "endpointUrlDescription": "An OpenAI compatible TTS endpoint (/v1/audio/speech).",
+      "apiKey": "API Key",
+      "apiKeyDescription": "Authentication key for your TTS provider.",
+      "model": "TTS Model",
+      "modelDescription": "The model id (e.g. tts-1 or eleven_multilingual_v2).",
+      "voice": "Voice Name",
+      "voiceDescription": "The name of the voice to use (e.g. alloy, echo, etc)."
     }
   },
   "agentMode": {

@@ -264,14 +264,14 @@ export default function DictationAgentSettings() {
       {useDictationAgent && (
         <div className="border-t border-border/70 pt-6 space-y-3">
           <SectionHeader
-            title="TTS Loop Integration"
-            description="Enable seamless spoken responses via text-to-speech."
+            title={t("dictationAgent.tts.title")}
+            description={t("dictationAgent.tts.description")}
           />
           <SettingsPanel>
             <SettingsPanelRow>
               <SettingsRow
-                label="Enable TTS Loop"
-                description="When enabled, the Voice Assistant will read out responses and automatically open the microphone again when it stops speaking."
+                label={t("dictationAgent.tts.enable")}
+                description={t("dictationAgent.tts.enableDescription")}
               >
                 <Toggle checked={ttsEnabled} onChange={setTtsEnabled} />
               </SettingsRow>
@@ -281,8 +281,8 @@ export default function DictationAgentSettings() {
               <>
                 <SettingsPanelRow>
                   <SettingsRow
-                    label="Wait Time (seconds)"
-                    description="How long the assistant waits in silence before ending the loop and closing the dictation session."
+                    label={t("dictationAgent.tts.waitTime")}
+                    description={t("dictationAgent.tts.waitTimeDescription")}
                   >
                     <Input
                       type="number"
@@ -296,8 +296,8 @@ export default function DictationAgentSettings() {
                 </SettingsPanelRow>
                 <SettingsPanelRow>
                   <SettingsRow
-                    label="Silence Level Threshold"
-                    description="The audio level below which audio is considered silence."
+                    label={t("dictationAgent.tts.silenceLevel")}
+                    description={t("dictationAgent.tts.silenceLevelDescription")}
                   >
                     <Input
                       type="number"
@@ -312,8 +312,8 @@ export default function DictationAgentSettings() {
                 </SettingsPanelRow>
                 <SettingsPanelRow>
                   <SettingsRow
-                    label="Endpoint URL"
-                    description="An OpenAI compatible TTS endpoint (/v1/audio/speech)."
+                    label={t("dictationAgent.tts.endpointUrl")}
+                    description={t("dictationAgent.tts.endpointUrlDescription")}
                   >
                     <Input
                       type="text"
@@ -325,8 +325,8 @@ export default function DictationAgentSettings() {
                 </SettingsPanelRow>
                 <SettingsPanelRow>
                   <SettingsRow
-                    label="API Key"
-                    description="Authentication key for your TTS provider."
+                    label={t("dictationAgent.tts.apiKey")}
+                    description={t("dictationAgent.tts.apiKeyDescription")}
                   >
                     <Input
                       type="password"
@@ -338,8 +338,8 @@ export default function DictationAgentSettings() {
                 </SettingsPanelRow>
                 <SettingsPanelRow>
                   <SettingsRow
-                    label="TTS Model"
-                    description="The model id (e.g. tts-1 or eleven_multilingual_v2)."
+                    label={t("dictationAgent.tts.model")}
+                    description={t("dictationAgent.tts.modelDescription")}
                   >
                     <Input
                       type="text"
@@ -351,8 +351,8 @@ export default function DictationAgentSettings() {
                 </SettingsPanelRow>
                 <SettingsPanelRow>
                   <SettingsRow
-                    label="Voice Name"
-                    description="The name of the voice to use (e.g. alloy, echo, etc)."
+                    label={t("dictationAgent.tts.voice")}
+                    description={t("dictationAgent.tts.voiceDescription")}
                   >
                     <Input
                       type="text"
